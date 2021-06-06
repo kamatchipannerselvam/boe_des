@@ -13,3 +13,9 @@ function productImagePath($image_name)
 {
     return public_path('images/products/'.$image_name);
 }
+function objectToArray ($object) {
+    if(!is_object($object) && !is_array($object)){
+    	return $object;
+    }
+    return array_map('objectToArray', (array) $object);
+}

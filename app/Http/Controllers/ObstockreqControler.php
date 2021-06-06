@@ -58,7 +58,7 @@ public function createOrder(Request $request)
                 }
             }
             else{
-                return json_encode(['status'=>'error','message'=>"You can order only lower or equal available Qty($inbstocks->qty) "]);
+                return json_encode(['status'=>'error','message'=>"You can order only lower or equal available Qty($items->qty) "]);
             }
         }
         elseif($inputparams['req_type']=="Delete"){
@@ -75,10 +75,30 @@ public function createOrder(Request $request)
                 return json_encode(['status'=>'error','message'=>"Something went Wrong"]);
             }
         }
-}
+    }
 
 public function sendOrder(){
-
+/***
+ * Step 1: group the stock request and insert into the obstockinfo table
+ * generate gw based on the hscode, pdtid,coo, qty
+    ----------------------------------------------
+    hscode, pdtid, coo, qty, gw[autogw], sprice, lineamount, 
+ * inbreference[json data: inbid:qty], boeno[jsondata]
+ * draft=>completed=>cancelled=>
+ */    
+    $results= \App\Models\Obstockinfo::getrequesteddetails();
+    $farray=array();
+    foreach($results as $res){
+        $inbstockids[]=$res->inbstockinfoid;
+        $pdtids[]=$res->pdt_id;
+        $qty[$res->hscode][$res->pdt_id][$res->coo_code]['rqty'][]=$res->rqty;
+        $farray[$res->hscode][$res->pdt_id][$res->coo_code]['total_qty']=array_sum($qty[$res->hscode][$res->pdt_id][$res->coo_code]['rqty']);
+    }
+    //echo "<pre>";print_r($farray);exit;
+    $boenumbers= \App\Models\Inbstock::GetboeinfobyId($inbstockids);
+    $mproducts= \App\Models\Mproduct::productdetails($pdtids);
+    echo "<pre>";print_r($mproducts);exit;
+    
     return view('boeoutb.sendorder');
 }
 

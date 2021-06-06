@@ -15,6 +15,7 @@ class CreateObdocstatusesTable extends Migration
     {
         Schema::create('obdocstatuses', function (Blueprint $table) {
             $table->id();
+            
             $table->timestamps();
         });
     }

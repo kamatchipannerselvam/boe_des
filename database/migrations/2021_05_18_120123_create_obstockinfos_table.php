@@ -20,14 +20,15 @@ class CreateObstockinfosTable extends Migration
         Schema::dropIfExists('ob_stock_info');
         Schema::create('ob_stock_info', function (Blueprint $table) {
             $table->id('obstockinfoid');
-            $table->foreignId('inbstockinfoid');
-			$table->foreignId('pdt_id');
-			$table->string('hscode',150);
+            $table->foreignId('pdt_id');
+            $table->string('hscode',150);
             $table->string('coo_code',250);
-			$table->bigInteger('rqty');
-			$table->bigInteger('gw');
-			$table->decimal('sellingprice',10,3)->nullable();
-			$table->decimal('linetotal',10,3)->nullable();
+            $table->bigInteger('total_rqty');
+            $table->bigInteger('gw');
+            $table->decimal('price',10,3)->nullable();
+            $table->decimal('linetotal',10,3)->nullable();
+            $table->text('inbstockref');
+            $table->text('boereference');
             $table->string('ob_status',50);
             $table->foreignId('created_by');
             $table->foreignId('updated_by')->nullable();

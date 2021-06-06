@@ -33,4 +33,17 @@ class Inbstock extends Model
         parent::boot();
         parent::observe(new InbstockObserver);
     }
+    /**
+     * 
+     * @param type $inputdetails
+     */
+    public static function GetboeinfobyId($inbstockids){ //$reqstockinfo= Receiveboeinb::whereIn();
+                $reqstockinfo = Inbstock::join('inb_doc_info', 'inb_stock_info.inbdocinfoid', 
+                '=', 'inb_doc_info.inbdocinfoid')
+                ->whereIn('inb_stock_info.inbstockinfoid',   $inbstockids)
+                ->get(['inb_doc_info.boe_number', 'inb_stock_info.inbstockinfoid']);
+        $rarray=array_column($reqstockinfo->toArray(),'boe_number', 'inbstockinfoid');
+        return $rarray;
+    }
+    
 }

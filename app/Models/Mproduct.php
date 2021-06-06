@@ -28,4 +28,11 @@ class Mproduct extends Model
         parent::boot();
         parent::observe(new MproductObserver);
     }
+    
+    public static function productdetails($productIds){
+        $results=Mproduct::whereIn('mpid',$productIds)->get();
+        $farray=$results->toArray();
+        $rarray=array();
+        foreach($farray as )
+    }
 }

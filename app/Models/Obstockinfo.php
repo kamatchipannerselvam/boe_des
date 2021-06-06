@@ -21,21 +21,30 @@ class Obstockinfo extends Model
         'updated_at'
         ];
     public $fillable = [
-		'obstockinfoid',
-		'inbstockinfoid',
+        'obstockinfoid',
         'pdt_id',
         'hscode',
         'coo_code',
-        'rqty',
-		'gw',
-        'sellingprice',
+        'total_rqty',
+	'gw',
+        'price',
         'linetotal',
-		'ob_status'
+        'inbstockref',
+        'boereference',
+	'ob_status'
     ];
     
     public static function boot() {
         parent::boot();
         parent::observe(new ObstockinfoObserver);
     }
+    
+    public static function getrequesteddetails(){
+        $reqstockinfo=Obstockreq::where('created_by','=',auth()->user()->id)
+            ->where('request_status','Creating')
+            ->get();
+        return $reqstockinfo;
+    }
+    
 	
 }
